@@ -655,6 +655,16 @@ document.getElementById("audioInvitacion").load();
     const audioSobre = document.getElementById("audioSobre");
     const audioInvitacion = document.getElementById("audioInvitacion");
     const toggleAudioBtn = document.getElementById("toggleAudioBtn");
+function iniciarMusicaSobre() {
+  if (audioSobre.paused && envelopeScreen.style.display !== "none") {
+    audioSobre.play().catch(() => {});
+  }
+  document.removeEventListener("click", iniciarMusicaSobre);
+  document.removeEventListener("touchstart", iniciarMusicaSobre);
+}
+
+document.addEventListener("click", iniciarMusicaSobre);
+document.addEventListener("touchstart", iniciarMusicaSobre);
 
     let audioEnabled = true;
     let isOpened = false;
