@@ -627,10 +627,12 @@
 
   <!-- Audios -->
   <audio id="audioSobre" src="musica-sobre.m4a" loop preload="auto"></audio>
-  <audio id="audioInvitacion" src="musica-invitacion.m4a" loop preload="auto"></audio>
+ <audio id="audioInvitacion" src="musica-invitacion.m4a" loop preload="auto"></audio>
 
   <script>
     const bubblesLayer = document.getElementById("bubblesLayer");
+document.getElementById("audioSobre").load();
+document.getElementById("audioInvitacion").load();
     for (let i = 0; i < 18; i++) {
       const bubble = document.createElement("span");
       bubble.className = "bubble";
