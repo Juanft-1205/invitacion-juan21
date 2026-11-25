@@ -1,0 +1,14 @@
+INSTRUCCIONES RÁPIDAS — INVITACIÓN JUAN 21
+==========================================
+
+1. Extrae esta carpeta en el escritorio de tu laptop.
+2. Dentro de esta carpeta ya tienes listo:
+   - index.html (la página interactiva con el sobre, tiburones neón, música dual y botón de Google Maps)
+3. Coloca aquí mismo tus 3 archivos finales (respetando exactamente estos nombres):
+   - invitacion.jpg        (la imagen de tu invitación)
+   - musica-sobre.mp3      (la canción del sobre)
+   - musica-invitacion.mp3 (la canción al abrirse la invitación)
+   *(Nota: también puedes probar tus archivos directamente desde el botón "📁 Cargar archivos" arriba a la derecha al abrir index.html).*
+4. Para obtener tu enlace de internet gratis:
+   - Entra a https://app.netlify.com/drop
+   - Arrastra esta carpeta completa al recuadro y te dará un link público listo para compartir.

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JUAN 21 — Invitación de Cumpleaños</title>
+  <style>
+    :root {
+      --bg-deep: #020817;
+      --bg-mid: #041633;
+      --neon-cyan: #00f0ff;
+      --neon-blue: #1d6fff;
+      --neon-purple: #7b61ff;
+      --text-main: #eaf9ff;
+      --text-soft: #9ad7f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at 50% 20%, #072759 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
+      color: var(--text-main);
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px 48px;
+    }
+
+    /* Rayos de luz submarinos */
+    .ocean-rays {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        conic-gradient(from 165deg at 25% -5%, rgba(0, 240, 255, 0.14), transparent 22%, transparent 78%, rgba(29, 111, 255, 0.14)),
+        conic-gradient(from 195deg at 75% -5%, rgba(0, 240, 255, 0.12), transparent 20%, transparent 80%, rgba(123, 97, 255, 0.12));
+      filter: blur(14px);
+    }
+
+    /* Capa de tiburones neón nadando */
+    .sharks-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .shark-swim {
+      position: absolute;
+      left: -260px;
+      animation: swimAcross linear infinite;
+      filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.85)) drop-shadow(0 0 18px rgba(29, 111, 255, 0.65));
+    }
+
+    .shark-swim svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .shark-tail {
+      transform-origin: 185px 52px;
+      animation: tailWag 0.65s ease-in-out infinite alternate;
+    }
+
+    @keyframes tailWag {
+      0% { transform: rotate(-14deg); }
+      100% { transform: rotate(15deg); }
+    }
+
+    @keyframes swimAcross {
+      0% {
+        transform: translateX(-260px) translateY(0px) scaleX(-1) scale(var(--shark-scale, 1));
+      }
+      25% {
+        transform: translateX(30vw) translateY(-16px) scaleX(-1) scale(var(--shark-scale, 1));
+      }
+      50% {
+        transform: translateX(60vw) translateY(12px) scaleX(-1) scale(var(--shark-scale, 1));
+      }
+      75% {
+        transform: translateX(90vw) translateY(-10px) scaleX(-1) scale(var(--shark-scale, 1));
+      }
+      100% {
+        transform: translateX(calc(100vw + 280px)) translateY(0px) scaleX(-1) scale(var(--shark-scale, 1));
+      }
+    }
+
+    .shark-1 {
+      top: 10%;
+      width: 175px;
+      --shark-scale: 1;
+      animation-duration: 18s;
+      animation-delay: -2s;
+      opacity: 0.72;
+    }
+
+    .shark-2 {
+      top: 34%;
+      width: 130px;
+      --shark-scale: 0.85;
+      animation-duration: 23s;
+      animation-delay: -11s;
+      opacity: 0.55;
+    }
+
+    .shark-3 {
+      top: 62%;
+      width: 195px;
+      --shark-scale: 1.05;
+      animation-duration: 16s;
+      animation-delay: -7s;
+      opacity: 0.78;
+    }
+
+    .shark-4 {
+      top: 82%;
+      width: 145px;
+      --shark-scale: 0.9;
+      animation-duration: 21s;
+      animation-delay: -15s;
+      opacity: 0.62;
+    }
+
+    /* Burbujas */
+    .bubbles-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -40px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0, 240, 255, 0.65);
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), rgba(0, 240, 255, 0.06));
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
+      animation: riseBubble linear infinite;
+    }
+
+    @keyframes riseBubble {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.85;
+      }
+      85% {
+        opacity: 0.75;
+      }
+      100% {
+        transform: translateY(-110vh) translateX(18px);
+        opacity: 0;
+      }
+    }
+
+    /* Botón superior para probar archivos locales */
+    .top-controls {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 30;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .control-btn {
+      background: rgba(5, 24, 54, 0.85);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.55);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .control-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0, 240, 255, 0.14);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.45);
+    }
+
+    .loader-drawer {
+      display: none;
+      position: fixed;
+      top: 58px;
+      right: 14px;
+      z-index: 30;
+      width: min(330px, calc(100vw - 28px));
+      background: rgba(4, 19, 44, 0.95);
+      border: 1px solid rgba(0, 240, 255, 0.55);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65), 0 0 22px rgba(0, 240, 255, 0.25);
+      backdrop-filter: blur(12px);
+    }
+
+    .loader-drawer.open {
+      display: block;
+    }
+
+    .loader-drawer h4 {
+      color: var(--neon-cyan);
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+    }
+
+    .loader-drawer p {
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+
+    .file-field {
+      margin-bottom: 10px;
+    }
+
+    .file-field label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .file-field input[type="file"] {
+      width: 100%;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    /* Contenedor principal */
+    .stage {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    /* Vista del sobre */
+    .envelope-screen {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .envelope-screen.hidden {
+      display: none;
+    }
+
+    .neon-title {
+      text-align: center;
+      font-size: clamp(1.35rem, 4.5vw, 1.8rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow:
+        0 0 8px var(--neon-cyan),
+        0 0 18px var(--neon-cyan),
+        0 0 34px var(--neon-blue);
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: min(350px, 88vw);
+      height: 230px;
+      cursor: pointer;
+      perspective: 1100px;
+      animation: floatEnvelope 3.2s ease-in-out infinite;
+    }
+
+    @keyframes floatEnvelope {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-9px); }
+    }
+
+    .envelope-body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      background: linear-gradient(155deg, rgba(11, 48, 107, 0.92) 0%, rgba(4, 17, 41, 0.96) 100%);
+      border: 2px solid var(--neon-cyan);
+      box-shadow:
+        0 0 16px rgba(0, 240, 255, 0.55),
+        0 0 38px rgba(29, 111, 255, 0.45),
+        inset 0 0 22px rgba(0, 240, 255, 0.22);
+      overflow: visible;
+    }
+
+    /* Solapa inferior y laterales estilizadas */
+    .envelope-pocket {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-pocket::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 62%;
+      background: linear-gradient(180deg, rgba(6, 28, 68, 0.75) 0%, rgba(2, 11, 28, 0.96) 100%);
+      clip-path: polygon(0 100%, 50% 18%, 100% 100%);
+      border-top: 1.5px solid rgba(0, 240, 255, 0.45);
+    }
+
+    /* Solapa superior que se abre */
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 58%;
+      background: linear-gradient(180deg, rgba(16, 72, 156, 0.95) 0%, rgba(6, 26, 63, 0.96) 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 3;
+      filter: drop-shadow(0 4px 12px rgba(0, 240, 255, 0.35));
+    }
+
+    .envelope-wrapper.opening .envelope-flap {
+      transform: rotateX(175deg);
+    }
+
+    /* Sello central neón */
+    .neon-seal {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #0a2d63 0%, #031026 100%);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 16px var(--neon-cyan), 0 0 28px rgba(29, 111, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #ffffff;
+      text-shadow: 0 0 8px var(--neon-cyan);
+      transition: transform 0.35s ease, opacity 0.35s ease;
+    }
+
+    .envelope-wrapper.opening .neon-seal {
+      transform: translate(-50%, -50%) scale(0.4);
+      opacity: 0;
+    }
+
+    .tap-hint {
+      font-size: 0.95rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.65);
+      animation: pulseText 1.8s ease-in-out infinite;
+      text-align: center;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.65; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+
+    /* Vista desplegada de la invitación */
+    .invitation-screen {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      animation: revealCard 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .invitation-screen.active {
+      display: flex;
+    }
+
+    @keyframes revealCard {
+      0% {
+        opacity: 0;
+        transform: translateY(26px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .card-frame {
+      width: 100%;
+      border-radius: 22px;
+      padding: 10px;
+      background: linear-gradient(145deg, rgba(0, 240, 255, 0.35), rgba(29, 111, 255, 0.25), rgba(123, 97, 255, 0.35));
+      border: 1.5px solid var(--neon-cyan);
+      box-shadow:
+        0 0 22px rgba(0, 240, 255, 0.45),
+        0 0 46px rgba(29, 111, 255, 0.35);
+    }
+
+    .card-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 15px;
+    }
+
+    .fallback-box {
+      display: none;
+      padding: 28px 20px;
+      text-align: center;
+      background: rgba(4, 18, 44, 0.92);
+      border-radius: 15px;
+    }
+
+    .fallback-box.visible {
+      display: block;
+    }
+
+    .fallback-box h3 {
+      color: var(--neon-cyan);
+      margin-bottom: 8px;
+    }
+
+    .fallback-box p {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      line-height: 1.45;
+    }
+
+    .map-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 380px;
+      padding: 14px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #ffffff;
+      background: linear-gradient(90deg, #0b5ed7 0%, #0099ff 50%, #00d4ff 100%);
+      border: 1.5px solid var(--neon-cyan);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.55), 0 0 34px rgba(29, 111, 255, 0.45);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .map-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.8), 0 0 44px rgba(29, 111, 255, 0.65);
+    }
+
+    .back-btn {
+      background: transparent;
+      border: 1px solid rgba(154, 215, 245, 0.45);
+      color: var(--text-soft);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .back-btn:hover {
+      color: #ffffff;
+      border-color: var(--neon-cyan);
+    }
+  </style>
+</head>
+<body>
+  <div class="ocean-rays"></div>
+
+  <!-- Tiburones neón nadando alrededor -->
+  <div class="sharks-layer" aria-hidden="true">
+    <div class="shark-swim shark-1">
+      <svg viewBox="0 0 240 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g class="shark-tail">
+          <path d="M184 52 L228 18 L215 52 L229 86 Z" stroke="#00f0ff" stroke-width="3" fill="rgba(0, 240, 255, 0.14)" stroke-linejoin="round"/>
+        </g>
+        <path d="M12 56 C35 28, 86 22, 138 35 L186 52 L138 69 C88 80, 38 74, 12 56 Z" stroke="#00f0ff" stroke-width="3.2" fill="rgba(29, 111, 255, 0.18)" stroke-linejoin="round"/>
+        <path d="M92 30 L114 6 L124 32 Z" stroke="#00f0ff" stroke-width="2.8" fill="rgba(0, 240, 255, 0.2)" stroke-linejoin="round"/>
+        <path d="M76 68 L56 92 L98 72 Z" stroke="#00f0ff" stroke-width="2.6" fill="rgba(0, 240, 255, 0.16)" stroke-linejoin="round"/>
+        <circle cx="44" cy="48" r="3.5" fill="#ffffff" stroke="#00f0ff" stroke-width="1.5"/>
+        <path d="M66 44 L64 56 M73 43 L71 57 M80 43 L78 57" stroke="#00f0ff" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="shark-swim shark-2">
+      <svg viewBox="0 0 240 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g class="shark-tail">
+          <path d="M184 52 L228 18 L215 52 L229 86 Z" stroke="#38bdf8" stroke-width="3" fill="rgba(56, 189, 248, 0.14)" stroke-linejoin="round"/>
+        </g>
+        <path d="M12 56 C35 28, 86 22, 138 35 L186 52 L138 69 C88 80, 38 74, 12 56 Z" stroke="#38bdf8" stroke-width="3.2" fill="rgba(29, 111, 255, 0.16)" stroke-linejoin="round"/>
+        <path d="M92 30 L114 6 L124 32 Z" stroke="#38bdf8" stroke-width="2.8" fill="rgba(56, 189, 248, 0.2)" stroke-linejoin="round"/>
+        <path d="M76 68 L56 92 L98 72 Z" stroke="#38bdf8" stroke-width="2.6" fill="rgba(56, 189, 248, 0.16)" stroke-linejoin="round"/>
+        <circle cx="44" cy="48" r="3.5" fill="#ffffff" stroke="#38bdf8" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+    <div class="shark-swim shark-3">
+      <svg viewBox="0 0 240 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g class="shark-tail">
+          <path d="M184 52 L228 18 L215 52 L229 86 Z" stroke="#00f0ff" stroke-width="3.2" fill="rgba(0, 240, 255, 0.16)" stroke-linejoin="round"/>
+        </g>
+        <path d="M12 56 C35 28, 86 22, 138 35 L186 52 L138 69 C88 80, 38 74, 12 56 Z" stroke="#00f0ff" stroke-width="3.4" fill="rgba(29, 111, 255, 0.2)" stroke-linejoin="round"/>
+        <path d="M92 30 L114 6 L124 32 Z" stroke="#00f0ff" stroke-width="3" fill="rgba(0, 240, 255, 0.22)" stroke-linejoin="round"/>
+        <path d="M76 68 L56 92 L98 72 Z" stroke="#00f0ff" stroke-width="2.8" fill="rgba(0, 240, 255, 0.18)" stroke-linejoin="round"/>
+        <circle cx="44" cy="48" r="3.8" fill="#ffffff" stroke="#00f0ff" stroke-width="1.5"/>
+        <path d="M66 44 L64 56 M73 43 L71 57 M80 43 L78 57" stroke="#00f0ff" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="shark-swim shark-4">
+      <svg viewBox="0 0 240 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g class="shark-tail">
+          <path d="M184 52 L228 18 L215 52 L229 86 Z" stroke="#00f0ff" stroke-width="3" fill="rgba(0, 240, 255, 0.14)" stroke-linejoin="round"/>
+        </g>
+        <path d="M12 56 C35 28, 86 22, 138 35 L186 52 L138 69 C88 80, 38 74, 12 56 Z" stroke="#00f0ff" stroke-width="3" fill="rgba(29, 111, 255, 0.16)" stroke-linejoin="round"/>
+        <path d="M92 30 L114 6 L124 32 Z" stroke="#00f0ff" stroke-width="2.6" fill="rgba(0, 240, 255, 0.2)" stroke-linejoin="round"/>
+        <circle cx="44" cy="48" r="3.2" fill="#ffffff" stroke="#00f0ff" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Burbujas submarinas -->
+  <div class="bubbles-layer" id="bubblesLayer" aria-hidden="true"></div>
+
+  <!-- Controles superiores -->
+  <div class="top-controls">
+    <button class="control-btn" id="toggleAudioBtn" type="button">🔊 Música: ON</button>
+    <button class="control-btn" id="openLoaderBtn" type="button">📁 Cargar archivos</button>
+  </div>
+
+  <div class="loader-drawer" id="loaderDrawer">
+    <h4>Probar archivos de tu laptop</h4>
+    <p>Al publicar en internet, usa los nombres <b>invitacion.jpg</b>, <b>musica-sobre.m4a</b> y <b>musica-invitacion.m4a</b> en la misma carpeta que <b>index.html</b>.</p>
+    <div class="file-field">
+      <label for="imgInput">Imagen de invitación:</label>
+      <input type="file" id="imgInput" accept="image/*" />
+    </div>
+    <div class="file-field">
+      <label for="audio1Input">Canción del sobre:</label>
+      <input type="file" id="audio1Input" accept="audio/*" />
+    </div>
+    <div class="file-field">
+      <label for="audio2Input">Canción al abrir la invitación:</label>
+      <input type="file" id="audio2Input" accept="audio/*" />
+    </div>
+  </div>
+
+  <!-- Escenario principal -->
+  <main class="stage">
+    <!-- Pantalla 1: Sobre -->
+    <section class="envelope-screen" id="envelopeScreen">
+      <h1 class="neon-title">JUAN 21</h1>
+      <div class="envelope-wrapper" id="envelopeWrapper" role="button" tabindex="0" aria-label="Abrir sobre de invitación">
+        <div class="envelope-body">
+          <div class="envelope-flap"></div>
+          <div class="envelope-pocket"></div>
+          <div class="neon-seal">21</div>
+        </div>
+      </div>
+      <p class="tap-hint">Toca el sobre para abrir tu invitación</p>
+    </section>
+
+    <!-- Pantalla 2: Invitación desplegada + Mapa -->
+    <section class="invitation-screen" id="invitationScreen">
+      <div class="card-frame">
+        <img id="invitationImg" src="invitacion.jpg" alt="Invitación de cumpleaños JUAN 21" />
+        <div class="fallback-box" id="fallbackBox">
+          <h3>Tu invitación se mostrará aquí</h3>
+          <p>Coloca tu imagen llamada <b>invitacion.jpg</b> junto a <b>index.html</b> o selecciónala en el botón <b>📁 Cargar archivos</b> de arriba.</p>
+        </div>
+      </div>
+
+      <a
+        class="map-btn"
+        id="mapLink"
+        href="https://www.google.com/maps/search/?api=1&query=Gral.+Nicol%C3%A1s+Bravo+325,+Centro,+66400+San+Nicol%C3%A1s+de+los+Garza,+N.L."
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        📍 Ver ubicación en Google Maps
+      </a>
+
+      <button class="back-btn" id="closeEnvelopeBtn" type="button">Cerrar sobre</button>
+    </section>
+  </main>
+
+  <!-- Audios -->
+  <audio id="audioSobre" src="musica-sobre.mp3" loop preload="auto"></audio>
+  <audio id="audioInvitacion" src="musica-invitacion.mp3" loop preload="auto"></audio>
+
+  <script>
+    const bubblesLayer = document.getElementById("bubblesLayer");
+    for (let i = 0; i < 18; i++) {
+      const bubble = document.createElement("span");
+      bubble.className = "bubble";
+      const size = 8 + Math.random() * 20;
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.style.left = `${Math.random() * 100}%`;
+      bubble.style.animationDuration = `${7 + Math.random() * 9}s`;
+      bubble.style.animationDelay = `${-Math.random() * 12}s`;
+      bubblesLayer.appendChild(bubble);
+    }
+
+    const envelopeWrapper = document.getElementById("envelopeWrapper");
+    const envelopeScreen = document.getElementById("envelopeScreen");
+    const invitationScreen = document.getElementById("invitationScreen");
+    const closeEnvelopeBtn = document.getElementById("closeEnvelopeBtn");
+    const invitationImg = document.getElementById("invitationImg");
+    const fallbackBox = document.getElementById("fallbackBox");
+
+    const audioSobre = document.getElementById("audioSobre");
+    const audioInvitacion = document.getElementById("audioInvitacion");
+    const toggleAudioBtn = document.getElementById("toggleAudioBtn");
+
+    let audioEnabled = true;
+    let isOpened = false;
+
+    function playTrack(activeAudio, otherAudio) {
+      otherAudio.pause();
+      otherAudio.currentTime = 0;
+      if (!audioEnabled) return;
+      activeAudio.play().catch(() => {});
+    }
+
+    function openInvitation() {
+      if (isOpened) return;
+      isOpened = true;
+      envelopeWrapper.classList.add("opening");
+      playTrack(audioInvitacion, audioSobre);
+
+      setTimeout(() => {
+        envelopeScreen.classList.add("hidden");
+        invitationScreen.classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 650);
+    }
+
+    function closeInvitation() {
+      isOpened = false;
+      invitationScreen.classList.remove("active");
+      envelopeScreen.classList.remove("hidden");
+      envelopeWrapper.classList.remove("opening");
+      playTrack(audioSobre, audioInvitacion);
+    }
+
+    envelopeWrapper.addEventListener("click", () => {
+      if (!audioSobre.currentTime && !isOpened && audioEnabled) {
+        audioSobre.play().catch(() => {});
+      }
+      openInvitation();
+    });
+
+    envelopeWrapper.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openInvitation();
+      }
+    });
+
+    closeEnvelopeBtn.addEventListener("click", closeInvitation);
+
+    toggleAudioBtn.addEventListener("click", () => {
+      audioEnabled = !audioEnabled;
+      if (!audioEnabled) {
+        audioSobre.pause();
+        audioInvitacion.pause();
+        toggleAudioBtn.textContent = "🔇 Música: OFF";
+      } else {
+        toggleAudioBtn.textContent = "🔊 Música: ON";
+        if (isOpened) {
+          audioInvitacion.play().catch(() => {});
+        } else {
+          audioSobre.play().catch(() => {});
+        }
+      }
+    });
+
+    invitationImg.addEventListener("error", () => {
+      invitationImg.style.display = "none";
+      fallbackBox.classList.add("visible");
+    });
+
+    invitationImg.addEventListener("load", () => {
+      invitationImg.style.display = "block";
+      fallbackBox.classList.remove("visible");
+    });
+
+    const openLoaderBtn = document.getElementById("openLoaderBtn");
+    const loaderDrawer = document.getElementById("loaderDrawer");
+    const imgInput = document.getElementById("imgInput");
+    const audio1Input = document.getElementById("audio1Input");
+    const audio2Input = document.getElementById("audio2Input");
+
+    openLoaderBtn.addEventListener("click", () => {
+      loaderDrawer.classList.toggle("open");
+    });
+
+    imgInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      invitationImg.src = URL.createObjectURL(file);
+    });
+
+    audio1Input.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      audioSobre.src = URL.createObjectURL(file);
+      if (!isOpened && audioEnabled) {
+        audioSobre.play().catch(() => {});
+      }
+    });
+
+    audio2Input.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      audioInvitacion.src = URL.createObjectURL(file);
+      if (isOpened && audioEnabled) {
+        audioInvitacion.play().catch(() => {});
+      }
+    });
+  </script>
+</body>
+</html>
